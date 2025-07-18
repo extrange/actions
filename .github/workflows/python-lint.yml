@@ -1,0 +1,98 @@
+name: Lint, format and check uv lockfile (Python)
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: Directory to run checks in. Defaults to the current working directory.
+        default: . # $ {{github.workspace}} is sometimes just the empty string '' which causes errors
+        required: false
+        type: string
+      check-standard-rules:
+        description: |-
+          Whether to also run Ruff against the ruff.toml in the common-actions repository.
+          Defaults to true.
+          Note: If a ruff.toml exists it will always be checked regardless of this setting.
+        default: true
+        required: false
+        type: boolean
+      check-uv-lockfile:
+        description: Whether to check that uv lockfile is in sync with pyproject.toml.
+        default: true
+        required: false
+        type: boolean
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: false
+        description: |-
+          List of SSH private key(s) used to access private repositories.
+          See https://github.com/webfactory/ssh-agent/tree/v0.9.0/?tab=readme-ov-file#using-multiple-keys for more information.
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.directory }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@38f3f104447c67c051c4a08e39b64a148898af3a # v4
+        with:
+          version: "latest"
+
+      - name: Check lockfile
+        if: inputs.check-uv-lockfile
+        run: uv lock --locked
+
+      - name: Secret Scanning
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --results=verified,unknown
+
+      - name: Setup SSH agent
+        if: env.SSH_PRIVATE_KEY != ''
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
+
+      - name: Install only dev dependencies
+        run: uv sync --only-dev
+
+      - name: Format
+        run: uv run ruff format --check
+
+      - name: Check if ruff.toml exists in repo
+        id: ruff
+        run: |
+          echo "has_ruff=$( [[ -f ruff.toml ]] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+
+      - name: Lint (using ruff.toml from the project)
+        if: fromJson(steps.ruff.outputs.has_ruff)
+        run: uv run ruff check
+
+      - name: Fetch ruff.toml from common-actions repo
+        if: inputs.check-standard-rules
+        uses: actions/checkout@v4
+        with:
+          repository: nuhs-projects/common-actions
+          path: repo-name-${{ github.run_id }}-${{ github.run_number }}
+          sparse-checkout: ruff.toml
+          sparse-checkout-cone-mode: false
+
+      # Workaround as actions/checkout doesn't let us clone outside of $GITHUB_WORKSPACE
+      # https://github.com/actions/checkout/issues/197
+      - run: mv ${{ github.workspace }}/repo-name-${{ github.run_id }}-${{ github.run_number }} /tmp
+        if: inputs.check-standard-rules
+
+      - name: Lint (using ruff.toml from common-actions)
+        if: inputs.check-standard-rules
+        run: uv run ruff --config /tmp/repo-name-${{ github.run_id }}-${{ github.run_number }}/ruff.toml check
+
+      - name: Static type check
+        run: uv run pyright
