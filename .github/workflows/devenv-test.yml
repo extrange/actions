@@ -1,8 +1,6 @@
-name: Lint workflow files
+name: Run devenv test
 on:
   push:
-  pull_request:
-    branches: [main]
   workflow_call:
 
 jobs:
