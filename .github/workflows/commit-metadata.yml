@@ -9,9 +9,6 @@ on:
         description: Unix timestamp of the commit
         value: ${{ jobs.get-commit-metadata.outputs.timestamp }}
 
-permissions:
-  contents: read
-
 jobs:
   get-commit-metadata:
     runs-on: ubuntu-latest
