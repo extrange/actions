@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   devenv-test:
-    uses: extrange/actions/.github/workflows/devenv-test.yml@v0.7
+    uses: extrange/actions/.github/workflows/devenv-test.yml@v1.0
 ```
 
 `build.yml`: Builds a Dockerfile (or a stage of it), caching via AWS ECR. Optionally, pushes the built image to ECR.
@@ -38,10 +38,10 @@ permissions:
 
 jobs:
   get-commit-metadata:
-    uses: extrange/actions/.github/workflows/commit-metadata.yml@v0.7
+    uses: extrange/actions/.github/workflows/commit-metadata.yml@v1.0
 
   build:
-    uses: extrange/actions/.github/workflows/build.yml@v0.7
+    uses: extrange/actions/.github/workflows/build.yml@v1.0
     needs: get-commit-metadata
     with:
       ecr_repository: chatbot/russell-gpt-web # Change this
