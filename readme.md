@@ -6,14 +6,11 @@
 # .github/workflows/lint-and-test.yml
 name: Lint and Test
 on:
-  pull_request:
+  push:
     branches:
       - main
     paths-ignore:
       - "**.md"
-
-permissions:
-  id-token: write
 
 jobs:
   devenv-test:
