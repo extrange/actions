@@ -17,6 +17,26 @@ jobs:
     uses: extrange/actions/.github/workflows/devenv-test.yml@v1.2
 ```
 
+`devenv-update.yml`: Update the [devenv] environment.
+
+```yaml
+# .github/workflows/devenv-update.yml
+name: "Update devenv and flake lockfile"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 17 * * *" # Runs daily at 01:00 SGT
+
+jobs:
+  devenv-update:
+    uses: extrange/actions/.github/workflows/devenv-update.yml@v1.2
+    # Nested workflows can only have as much access as the caller workflow.
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/reusable-workflows#access-and-permissions-for-nested-workflows
+    permissions:
+      contents: write
+```
+
 `build.yml`: Builds a Dockerfile (or a stage of it), caching via AWS ECR. Optionally, pushes the built image to ECR.
 
 ```yaml
