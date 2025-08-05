@@ -2,6 +2,8 @@ name: "Update devenv and flake lockfile"
 
 on:
   workflow_call:
+  schedule:
+    - cron: "0 17 * * *" # Runs daily at 01:00 SGT
 
 jobs:
   tests:
@@ -30,6 +32,9 @@ jobs:
 
       - name: Update flake lockfile
         run: devenv update
+
+      - name: Test
+        run: devenv test
 
       - uses: stefanzweifel/git-auto-commit-action@v6
         with:
