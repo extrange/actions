@@ -14,7 +14,7 @@ on:
 
 jobs:
   devenv-test:
-    uses: extrange/actions/.github/workflows/devenv-test.yml@v1.2
+    uses: extrange/actions/.github/workflows/devenv-test.yml@v1.3
 ```
 
 `devenv-update.yml`: Update the [devenv] environment.
@@ -30,7 +30,7 @@ on:
 
 jobs:
   devenv-update:
-    uses: extrange/actions/.github/workflows/devenv-update.yml@v1.2
+    uses: extrange/actions/.github/workflows/devenv-update.yml@v1.3
     # Nested workflows can only have as much access as the caller workflow.
     # https://docs.github.com/en/actions/reference/workflows-and-actions/reusable-workflows#access-and-permissions-for-nested-workflows
     permissions:
@@ -55,10 +55,10 @@ permissions:
 
 jobs:
   get-commit-metadata:
-    uses: extrange/actions/.github/workflows/commit-metadata.yml@v1.2
+    uses: extrange/actions/.github/workflows/commit-metadata.yml@v1.3
 
   build:
-    uses: extrange/actions/.github/workflows/build.yml@v1.2
+    uses: extrange/actions/.github/workflows/build.yml@v1.3
     needs: get-commit-metadata
     with:
       ecr_repository: chatbot/russell-gpt-web # Change this
