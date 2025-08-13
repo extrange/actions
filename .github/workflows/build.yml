@@ -59,6 +59,8 @@ on:
             latest
             v1.0.0
           ```
+
+          The `latest` tag and a tag based on the short commit hash will always be applied, so you do not need to specify these here.
         required: false
         default: ""
         type: string
