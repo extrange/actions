@@ -175,8 +175,8 @@ jobs:
           target: ${{ inputs.target }}
           context: ${{ inputs.context }}
           platforms: linux/amd64
-          cache-to: mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=${{env.REGISTRY}}/${{ inputs.repository_name }}:${{ inputs.target || 'cache' }}
-          cache-from: type=registry,ref=${{env.REGISTRY}}/${{ inputs.repository_name }}:${{ inputs.target || 'cache' }}
+          cache-to: mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=${{env.REGISTRY}}/${{ inputs.repository_name }}:cache
+          cache-from: type=registry,ref=${{env.REGISTRY}}/${{ inputs.repository_name }}:cache
           provenance: false
           ssh: ${{ env.SSH_PRIVATE_KEY && 'default'}} # Use the 'default' ssh-agent setup previously
           secret-files: |
