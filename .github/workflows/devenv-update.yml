@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: nixbuild/nix-quick-install-action@v31
+      - uses: nixbuild/nix-quick-install-action@63ca48f939ee3b8d835f4126562537df0fee5b91 # v32
         with:
           nix_conf: |
             keep-env-derivations = true
