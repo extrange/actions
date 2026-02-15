@@ -41,6 +41,6 @@ jobs:
       - name: Test
         run: devenv test
 
-      - uses: stefanzweifel/git-auto-commit-action@v6
+      - uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7
         with:
           commit_message: "chore: update devenv and flake lockfile"
