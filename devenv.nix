@@ -1,7 +1,6 @@
 { ... }:
 
 {
-  cachix.enable = false;
   git-hooks.hooks = {
     trim-trailing-whitespace.enable = true;
     end-of-file-fixer.enable = true;
