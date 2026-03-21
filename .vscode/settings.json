@@ -3,7 +3,7 @@
         "bash": {
             "path": "bash",
             "icon": "terminal-bash",
-            "args": ["-c", "devenv shell"]
+            "args": ["-c", "devenv shell --quiet"]
         },
     }
 }

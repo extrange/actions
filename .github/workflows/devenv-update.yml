@@ -41,8 +41,7 @@ jobs:
       - name: Test
         run: devenv test
 
-      - name: Run prek
-        uses: j178/prek-action@v1
+        # this is going to fail on any prek config using whitespace trimming
 
       - uses: stefanzweifel/git-auto-commit-action@v6
         with:
