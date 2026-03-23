@@ -38,10 +38,11 @@ jobs:
       - name: Update flake lockfile
         run: devenv update
 
+      - name: Run prek
+        run: prek run -a || true
+
       - name: Test
         run: devenv test
-
-        # this is going to fail on any prek config using whitespace trimming
 
       - uses: stefanzweifel/git-auto-commit-action@v6
         with:
