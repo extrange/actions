@@ -1,6 +1,7 @@
 name: "Update devenv and flake lockfile"
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       cache-size:
@@ -39,7 +40,7 @@ jobs:
         run: devenv update
 
       - name: Run prek
-        run: prek run -a || true
+        run: devenv shell -- prek -a || true
 
       - name: Test
         run: devenv test
